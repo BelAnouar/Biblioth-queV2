@@ -5,7 +5,7 @@ This project is an advanced console-based library management system built in Jav
 ## Project Design
 Below is the system design structure of the project:
 
-![System Design](./design.jpeg)
+![System Design](./design.png)
 ## Learning Objectives
 - Deepen understanding of Object-Oriented Programming (OOP) concepts in Java, particularly polymorphism and inheritance.
 - Design and implement a simple relational database using PostgreSQL.
@@ -99,8 +99,25 @@ Below is the system design structure of the project:
 - **PostgreSQL**: Install PostgreSQL and set up the required database schema.
 - **JDBC Driver**: Ensure the PostgreSQL JDBC driver is included in your project dependencies.
 
+# Conception UML
+## Diagramme de cas d'utilisation :
+![./diagrammeC.png](./diagrammeC.png)
+## Diagramme de classe :
+![./diagrammeU.png](./diagrammeU.png)
+
+
 ### Steps to Run the Project
 1. Clone the repository:
    ```bash
    git clone https://github.com/username/LibraryManagementSystemV2.git
    cd LibraryManagementSystemV2
+
+
+Pour exécuter l'application, exécutez la commande suivante :
+```bash
+cd out/artifacts/Bibliothequev2_jar
+   ```
+   ```bash
+     java -jar Bibliothequev2.jar
+    ```
+

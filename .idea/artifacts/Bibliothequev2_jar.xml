@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Bibliothequev2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Bibliothequev2_jar</output-path>
+    <root id="archive" name="Bibliothequev2.jar">
+      <element id="module-output" name="Bibliothequev2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.m2/repository/org/checkerframework/checker-qual/3.42.0/checker-qual-3.42.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.m2/repository/io/github/cdimascio/dotenv-java/3.0.0/dotenv-java-3.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../.m2/repository/org/postgresql/postgresql/42.7.4/postgresql-42.7.4.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

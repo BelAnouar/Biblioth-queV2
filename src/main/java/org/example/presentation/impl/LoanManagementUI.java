@@ -3,7 +3,6 @@ package org.example.presentation.impl;
 import org.example.Enum.DocumentType;
 import org.example.presentation.MainGui;
 import org.example.service.LoanService;
-import org.example.service.ReservationService;
 
 import java.sql.SQLException;
 import java.util.InputMismatchException;
@@ -11,9 +10,7 @@ import java.util.Scanner;
 
 import static org.example.utils.Print.logInfo;
 
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+
 
 public class LoanManagementUI implements MainGui {
 

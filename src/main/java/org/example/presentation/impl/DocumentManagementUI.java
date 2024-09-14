@@ -39,19 +39,19 @@ public class DocumentManagementUI implements MainGui {
 
             switch (option) {
                 case 1:
-                    ajouterDocument(sc);
+                    addDocument(sc);
                     break;
                 case 2:
-                    afficherDocuments(sc);
+                    displayDocuments(sc);
                     break;
                 case 3:
-                    rechercherDocument(sc);
+                    searchDocument(sc);
                     break;
                 case 4:
-                    modifierDocument(sc);
+                    modifyDocument(sc);
                     break;
                 case 5:
-                    supprimerDocument(sc);
+                    deleteDocument(sc);
                     break;
                 case 6:
                     menuToNavigate = new ConsoleUI();
@@ -77,20 +77,20 @@ public class DocumentManagementUI implements MainGui {
         logInfo("5. Supprimer un document");
         logInfo("6.Return to mainMenu");
     }
-    private void supprimerDocument(Scanner sc) {
-
-        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+    private void deleteDocument(Scanner sc) {
+        logInfo("Document type (1. Book, 2. Magazine, 3. Scientific Journal, 4. University Thesis):");
 
         int ch = sc.nextInt();
         sc.nextLine();
-        logInfo("entrer id:");
+        logInfo("Enter document ID:");
         int id = Integer.parseInt(sc.nextLine());
         DocumentType type = getDocumentType(ch);
 
-        DocumentService.delete(id,type);
+        DocumentService.delete(id, type);
     }
-    private void afficherDocuments(Scanner sc) {
-        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+
+    private void displayDocuments(Scanner sc) {
+        logInfo("Document type (1. Book, 2. Magazine, 3. Scientific Journal, 4. University Thesis):");
 
         int ch = sc.nextInt();
         sc.nextLine();
@@ -99,51 +99,50 @@ public class DocumentManagementUI implements MainGui {
         DocumentService.afficherTous(type);
     }
 
-    private void modifierDocument(Scanner sc) {
-        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+    private void modifyDocument(Scanner sc) {
+        logInfo("Document type (1. Book, 2. Magazine, 3. Scientific Journal, 4. University Thesis):");
 
         int ch = sc.nextInt();
         sc.nextLine();
         DocumentType type = getDocumentType(ch);
-        logInfo("enter id:");
+        logInfo("Enter ID:");
         int id = sc.nextInt();
-        logInfo("author");
+        sc.nextLine();
+        logInfo("Enter author:");
         String author = sc.nextLine();
-        logInfo("title");
+        logInfo("Enter title:");
         String title = sc.nextLine();
-        logInfo("local");
+        logInfo("Enter publication date (dd/MM/yyyy):");
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate datePublication = LocalDate.parse(sc.nextLine(), df);
-        logInfo("nomnede");
-        int nombreDePages = sc.nextInt();
-        logInfo("acess");
-        UtilisateurType acces = UtilisateurType.valueOf(sc.next());
-
-        System.out.println(id);
+        logInfo("Enter number of pages:");
+        int numberOfPages = sc.nextInt();
+        logInfo("Enter access level:");
+        UtilisateurType access = UtilisateurType.valueOf(sc.next());
 
         Documents document;
         switch (type) {
             case LIVRE:
-                logInfo("isbn");
+                logInfo("Enter ISBN:");
                 int isbn = sc.nextInt();
-                document = new Livre(id,author, title, datePublication, nombreDePages, acces, isbn);
+                document = new Livre(id, author, title, datePublication, numberOfPages, access, isbn);
                 break;
             case MAGAZINE:
-                logInfo("numero");
-                int numero = sc.nextInt();
-                document = new Magasine(id,author, title, datePublication, nombreDePages, acces, numero);
+                logInfo("Enter issue number:");
+                int issueNumber = sc.nextInt();
+                document = new Magasine(id, author, title, datePublication, numberOfPages, access, issueNumber);
                 break;
             case JOURNAL_SCIENTIFIQUE:
-                logInfo("domaineRec");
-                String domaineRec = sc.next();
-                document = new JournalScientifique(id,author, title, datePublication, nombreDePages, acces, domaineRec);
+                logInfo("Enter research domain:");
+                String researchDomain = sc.next();
+                document = new JournalScientifique(id, author, title, datePublication, numberOfPages, access, researchDomain);
                 break;
             case THESE_UNIVERSITAIRE:
-                logInfo("uni");
-                String universite = sc.next();
-                logInfo("domaine");
-                String domaine = sc.next();
-                document = new TheseUniversitaire(id,author, title, datePublication, nombreDePages, acces, universite, domaine);
+                logInfo("Enter university:");
+                String university = sc.next();
+                logInfo("Enter field of study:");
+                String field = sc.next();
+                document = new TheseUniversitaire(id, author, title, datePublication, numberOfPages, access, university, field);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid document type");
@@ -156,73 +155,69 @@ public class DocumentManagementUI implements MainGui {
 
 
 
-    public void ajouterDocument(Scanner sc) {
-        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+
+    public void addDocument(Scanner sc) {
+        logInfo("Document type (1. Book, 2. Magazine, 3. Scientific Journal, 4. University Thesis):");
 
         int ch = sc.nextInt();
-        sc.nextLine();
+        sc.nextLine(); // Consume newline after the number input
         DocumentType type = getDocumentType(ch);
-        logInfo("author");
+        logInfo("Enter author:");
         String author = sc.nextLine();
-        logInfo("author");
+        logInfo("Enter title:");
         String title = sc.nextLine();
-        logInfo("local");
+        logInfo("Enter publication date (dd/MM/yyyy):");
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate datePublication = LocalDate.parse(sc.nextLine(), df);
-        logInfo("nomnede");
-        int nombreDePages = sc.nextInt();
-        logInfo("acess");
-        UtilisateurType acces = UtilisateurType.valueOf(sc.next());
-
-
+        logInfo("Enter number of pages:");
+        int numberOfPages = sc.nextInt();
+        logInfo("Enter access level:");
+        UtilisateurType access = UtilisateurType.valueOf(sc.next());
 
         Documents document;
         switch (type) {
             case LIVRE:
-                logInfo("isbn");
+                logInfo("Enter ISBN:");
                 int isbn = sc.nextInt();
-                document = new Livre(author, title, datePublication, nombreDePages, acces, isbn);
+                document = new Livre(author, title, datePublication, numberOfPages, access, isbn);
                 break;
             case MAGAZINE:
-                logInfo("numero");
-                int numero = sc.nextInt();
-                document = new Magasine(author, title, datePublication, nombreDePages, acces, numero);
+                logInfo("Enter issue number:");
+                int issueNumber = sc.nextInt();
+                document = new Magasine(author, title, datePublication, numberOfPages, access, issueNumber);
                 break;
             case JOURNAL_SCIENTIFIQUE:
-                logInfo("domaineRec");
-                String domaineRec = sc.next();
-                document = new JournalScientifique(author, title, datePublication, nombreDePages, acces, domaineRec);
+                logInfo("Enter research domain:");
+                String researchDomain = sc.next();
+                document = new JournalScientifique(author, title, datePublication, numberOfPages, access, researchDomain);
                 break;
             case THESE_UNIVERSITAIRE:
-                logInfo("uni");
-                String universite = sc.next();
-                logInfo("domaine");
-                String domaine = sc.next();
-                document = new TheseUniversitaire(author, title, datePublication, nombreDePages, acces, universite, domaine);
+                logInfo("Enter university:");
+                String university = sc.next();
+                logInfo("Enter field of study:");
+                String field = sc.next();
+                document = new TheseUniversitaire(author, title, datePublication, numberOfPages, access, university, field);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid document type");
         }
 
         DocumentService.ajouter(document, type);
-
-
     }
 
 
-
-    public void rechercherDocument(Scanner sc) {
-        logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");
+    public void searchDocument(Scanner sc) {
+        logInfo("1. Book, 2. Magazine, 3. Scientific Journal, 4. University Thesis:");
         try {
             int ch = sc.nextInt();
             sc.nextLine();
             DocumentType type = getDocumentType(ch);
-            int id= sc.nextInt();
+            logInfo("Enter document ID:");
+            int id = sc.nextInt();
 
-            DocumentService.search(id,type);
+            DocumentService.search(id, type);
         } catch (InputMismatchException e) {
             logInfo("Invalid input. Please enter the correct data type.");
-
         }
     }
 

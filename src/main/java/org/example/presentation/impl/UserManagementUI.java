@@ -1,17 +1,16 @@
 package org.example.presentation.impl;
 
 
-import org.example.Enum.DocumentType;
+
 import org.example.Enum.UtilisateurType;
 import org.example.metier.*;
-import org.example.metier.abstracts.Documents;
+
 import org.example.metier.abstracts.Utilisateur;
 import org.example.presentation.MainGui;
-import org.example.service.DocumentService;
+
 import org.example.service.UserService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
