@@ -9,9 +9,22 @@ import java.time.LocalDate;
 
 public class Livre extends Documents implements Empruntable, Reservable {
     private int isbn;
+    public  Livre(){
+        super();
+    }
+    public Livre(String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces,  int isbn) {
+        super(author, title, datePublication, nombreDePages, acces);
+        this.isbn = isbn;
+    }
 
-    public Livre(String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces, boolean isEmprunt, int isbn) {
-        super(author, title, datePublication, nombreDePages, acces, isEmprunt);
+    public Livre(int id,String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces,  int isbn) {
+        super(id,author, title, datePublication, nombreDePages, acces);
+        this.isbn = isbn;
+    }
+
+
+
+    public void setIsbn(int isbn) {
         this.isbn = isbn;
     }
 
@@ -21,13 +34,14 @@ public class Livre extends Documents implements Empruntable, Reservable {
 
     @Override
     public String afficherDetails() {
-        return "Livre {" +
-                "ID='" + id + '\'' +
-                ", Titre='" + title + '\'' +
-                ", Auteur='" + author + '\'' +
-                ", Date de publication=" + datePublication +
-                ", Nombre de pages=" + nombreDePages +
-                ", ISBN=" + isbn +
+        return "Livre{" +
+                "isbn=" + isbn +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", datePublication=" + datePublication +
+                ", nombreDePages=" + nombreDePages +
+                ", acces=" + acces +
+                ", isEmprunt=" + isEmprunt +
                 '}';
     }
 

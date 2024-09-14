@@ -9,6 +9,6 @@ public interface DocumentDAO <T> {
     void updateDocument(T document);
     void deleteDocument(int documentId);
     Documents displayDocument(int documentId);
-    List<Documents> displayAllDocuments();
-    List<Documents>searchDocument(int id);
+    List<T> displayAllDocuments();
+
 }

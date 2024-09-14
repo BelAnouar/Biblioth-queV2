@@ -7,7 +7,7 @@ import org.example.metier.Livre;
 import org.example.metier.Magasine;
 import org.example.metier.TheseUniversitaire;
 import org.example.metier.abstracts.Documents;
-import org.example.service.impl.DocumentService;
+import org.example.service.DocumentService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +23,7 @@ public class DocumentManagementUI implements MainGui {
     @Override
     public void start() {
         Scanner sc = new Scanner(System.in);
-        MainGui menuToNavigate=null;
+        MainGui menuToNavigate = null;
         while (true) {
             printMenuHeader();
             System.out.print("Choisissez une option : ");
@@ -41,29 +41,32 @@ public class DocumentManagementUI implements MainGui {
                 case 1:
                     ajouterDocument(sc);
                     break;
-//                case 2:
-//                    afficherDocuments();
-//                    break;
-//                case 3:
-//                    rechercherDocument(sc);
-//                    break;
-//                case 4:
-//                    modifierDocument(sc);
-//                    break;
-//                case 5:
-//                    supprimerDocument(sc);
-//                    break;
                 case 2:
+                    afficherDocuments(sc);
+                    break;
+                case 3:
+                    rechercherDocument(sc);
+                    break;
+                case 4:
+                    modifierDocument(sc);
+                    break;
+                case 5:
+                    supprimerDocument(sc);
+                    break;
+                case 6:
                     menuToNavigate = new ConsoleUI();
                     break;
                 default:
                     System.out.println("Option invalide. Essayez encore.");
                     break;
             }
-            menuToNavigate.start();
-        }
-    }
+            if (menuToNavigate != null) {
+                break;
+            }
 
+        }
+        menuToNavigate.start();
+    }
     @Override
     public void printMenuHeader() {
         logInfo("***** MENU DE GESTION DES DOCUMENTS *****");
@@ -74,6 +77,83 @@ public class DocumentManagementUI implements MainGui {
         logInfo("5. Supprimer un document");
         logInfo("6.Return to mainMenu");
     }
+    private void supprimerDocument(Scanner sc) {
+
+        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+
+        int ch = sc.nextInt();
+        sc.nextLine();
+        logInfo("entrer id:");
+        int id = Integer.parseInt(sc.nextLine());
+        DocumentType type = getDocumentType(ch);
+
+        DocumentService.delete(id,type);
+    }
+    private void afficherDocuments(Scanner sc) {
+        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+
+        int ch = sc.nextInt();
+        sc.nextLine();
+        DocumentType type = getDocumentType(ch);
+
+        DocumentService.afficherTous(type);
+    }
+
+    private void modifierDocument(Scanner sc) {
+        logInfo("Type de document (1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire):");
+
+        int ch = sc.nextInt();
+        sc.nextLine();
+        DocumentType type = getDocumentType(ch);
+        logInfo("enter id:");
+        int id = sc.nextInt();
+        logInfo("author");
+        String author = sc.nextLine();
+        logInfo("title");
+        String title = sc.nextLine();
+        logInfo("local");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate datePublication = LocalDate.parse(sc.nextLine(), df);
+        logInfo("nomnede");
+        int nombreDePages = sc.nextInt();
+        logInfo("acess");
+        UtilisateurType acces = UtilisateurType.valueOf(sc.next());
+
+        System.out.println(id);
+
+        Documents document;
+        switch (type) {
+            case LIVRE:
+                logInfo("isbn");
+                int isbn = sc.nextInt();
+                document = new Livre(id,author, title, datePublication, nombreDePages, acces, isbn);
+                break;
+            case MAGAZINE:
+                logInfo("numero");
+                int numero = sc.nextInt();
+                document = new Magasine(id,author, title, datePublication, nombreDePages, acces, numero);
+                break;
+            case JOURNAL_SCIENTIFIQUE:
+                logInfo("domaineRec");
+                String domaineRec = sc.next();
+                document = new JournalScientifique(id,author, title, datePublication, nombreDePages, acces, domaineRec);
+                break;
+            case THESE_UNIVERSITAIRE:
+                logInfo("uni");
+                String universite = sc.next();
+                logInfo("domaine");
+                String domaine = sc.next();
+                document = new TheseUniversitaire(id,author, title, datePublication, nombreDePages, acces, universite, domaine);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid document type");
+        }
+
+        DocumentService.update(document, type);
+    }
+
+
+
 
 
     public void ajouterDocument(Scanner sc) {
@@ -93,8 +173,7 @@ public class DocumentManagementUI implements MainGui {
         int nombreDePages = sc.nextInt();
         logInfo("acess");
         UtilisateurType acces = UtilisateurType.valueOf(sc.next());
-        logInfo("empreunt");
-        boolean isEmprunt = sc.nextBoolean();
+
 
 
         Documents document;
@@ -102,24 +181,24 @@ public class DocumentManagementUI implements MainGui {
             case LIVRE:
                 logInfo("isbn");
                 int isbn = sc.nextInt();
-                document = new Livre(author, title, datePublication, nombreDePages, acces, isEmprunt, isbn);
+                document = new Livre(author, title, datePublication, nombreDePages, acces, isbn);
                 break;
             case MAGAZINE:
                 logInfo("numero");
                 int numero = sc.nextInt();
-                document = new Magasine(author, title, datePublication, nombreDePages, acces, isEmprunt, numero);
+                document = new Magasine(author, title, datePublication, nombreDePages, acces, numero);
                 break;
             case JOURNAL_SCIENTIFIQUE:
                 logInfo("domaineRec");
                 String domaineRec = sc.next();
-                document = new JournalScientifique(author, title, datePublication, nombreDePages, acces, isEmprunt, domaineRec);
+                document = new JournalScientifique(author, title, datePublication, nombreDePages, acces, domaineRec);
                 break;
             case THESE_UNIVERSITAIRE:
                 logInfo("uni");
                 String universite = sc.next();
                 logInfo("domaine");
                 String domaine = sc.next();
-                document = new TheseUniversitaire(author, title, datePublication, nombreDePages, acces, isEmprunt, universite, domaine);
+                document = new TheseUniversitaire(author, title, datePublication, nombreDePages, acces, universite, domaine);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid document type");
@@ -130,44 +209,7 @@ public class DocumentManagementUI implements MainGui {
 
     }
 
-    public void emprunterDocument(Scanner sc) {
-        logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");
-        try {
-            int ch = sc.nextInt();
-            sc.nextLine();
-            DocumentType type = getDocumentType(ch);
-        } catch (InputMismatchException e) {
-            logInfo("Invalid input. Please enter the correct data type.");
-            sc.nextLine();
-        }
-    }
 
-    public void retournerDocument(Scanner sc) {
-        logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");
-        try {
-            int ch = sc.nextInt();
-            sc.nextLine();
-            DocumentType type = getDocumentType(ch);
-
-
-        } catch (InputMismatchException e) {
-            logInfo("Invalid input. Please enter the correct data type.");
-
-        }
-    }
-
-    public void afficherDocument(Scanner sc) {
-        logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");
-        try {
-            int ch = sc.nextInt();
-            sc.nextLine();
-            DocumentType type = getDocumentType(ch);
-
-        } catch (InputMismatchException e) {
-            logInfo("Invalid input. Please enter the correct data type.");
-
-        }
-    }
 
     public void rechercherDocument(Scanner sc) {
         logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");

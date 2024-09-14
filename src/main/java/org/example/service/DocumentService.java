@@ -1,4 +1,4 @@
-package org.example.service.impl;
+package org.example.service;
 
 import org.example.Enum.DocumentType;
 import org.example.metier.JournalScientifique;
@@ -32,7 +32,7 @@ public class DocumentService {
         }
     }
 
-    ;
+
 
     public static void ajouter(Documents documents, DocumentType type) {
         switch (type) {
@@ -43,6 +43,25 @@ public class DocumentService {
         }
 
     }
+    public static void update(Documents documents, DocumentType type) {
+        switch (type) {
+            case LIVRE -> livreDAOImp.updateDocument((Livre) documents);
+            case MAGAZINE -> magazineDAOImp.updateDocument((Magasine) documents);
+            case JOURNAL_SCIENTIFIQUE -> journalScientifiqueDAOImp.updateDocument((JournalScientifique) documents);
+            case THESE_UNIVERSITAIRE -> theseUniversitaireDAOImp.updateDocument((TheseUniversitaire) documents);
+        }
+
+    }
+    public static void delete(int id, DocumentType type) {
+        switch (type) {
+            case LIVRE -> livreDAOImp.deleteDocument(id);
+            case MAGAZINE -> magazineDAOImp.deleteDocument(id);
+            case JOURNAL_SCIENTIFIQUE -> journalScientifiqueDAOImp.deleteDocument(id);
+            case THESE_UNIVERSITAIRE -> theseUniversitaireDAOImp.deleteDocument(id);
+        }
+
+    }
+
 
 //    public static void emprunter(String id, DocumentType type) {
 //
@@ -64,23 +83,24 @@ public class DocumentService {
 //        }
 //    }
 //
-//    public static void afficherTous(DocumentType type) {
-//
-//        switch (type) {
-//            case LIVRE -> LivreImp.afficherTous();
-//            case MAGAZINE -> MagasineImp.afficherTous();
-//            case JOURNAL_SCIENTIFIQUE -> JournalScientifiqueImp.afficherTous();
-//            case THESE_UNIVERSITAIRE -> TheseUniversitaireImp.afficherTous();
-//        }
-//    }
-//
-//    public static void rechercher(String id, DocumentType type) {
-//
-//        switch (type) {
-//            case LIVRE -> LivreImp.rechercher(id);
-//            case MAGAZINE -> MagasineImp.rechercher(id);
-//            case JOURNAL_SCIENTIFIQUE -> JournalScientifiqueImp.rechercher(id);
-//            case THESE_UNIVERSITAIRE -> TheseUniversitaireImp.rechercher(id);
-//        }
-//    }
+    public static void afficherTous(DocumentType type) {
+
+        switch (type) {
+            case LIVRE -> livreDAOImp.displayAllDocuments().stream()
+                    .forEach(livre -> System.out.println(livre.afficherDetails()));
+            case MAGAZINE -> magazineDAOImp.displayAllDocuments().stream().forEach(magasine ->System.out.println(magasine.afficherDetails()) );
+            case JOURNAL_SCIENTIFIQUE -> journalScientifiqueDAOImp.displayAllDocuments().stream().forEach(journalScientifique -> System.out.println(journalScientifique.afficherDetails()));
+            case THESE_UNIVERSITAIRE -> theseUniversitaireDAOImp.displayAllDocuments().stream().forEach(theseUniversitaire -> System.out.println(theseUniversitaire.afficherDetails()));
+        }
+    }
+
+    public static void search(int id, DocumentType type) {
+
+        switch (type) {
+            case LIVRE -> livreDAOImp.displayDocument(id);
+            case MAGAZINE -> magazineDAOImp.displayDocument(id);
+            case JOURNAL_SCIENTIFIQUE -> journalScientifiqueDAOImp.displayDocument(id);
+            case THESE_UNIVERSITAIRE -> theseUniversitaireDAOImp.displayDocument(id);
+        }
+    }
 }

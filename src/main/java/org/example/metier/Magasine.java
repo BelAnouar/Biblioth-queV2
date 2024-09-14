@@ -10,23 +10,33 @@ import java.time.LocalDate;
 public class Magasine  extends Documents implements Empruntable, Reservable {
     private int numero;
 
-    public int getNumero() {
-        return numero;
-    }
 
-    public void setNumero(int numero) {
+    public Magasine(){
+        super();
+    }
+    public Magasine(String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces,  int numero) {
+        super(author, title, datePublication, nombreDePages, acces);
         this.numero = numero;
     }
 
-    public Magasine(String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces, boolean isEmprunt, int numero) {
-        super(author, title, datePublication, nombreDePages, acces, isEmprunt);
+    public Magasine( int id,String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces,  int numero) {
+        super(id,author, title, datePublication, nombreDePages, acces);
         this.numero = numero;
     }
-
     @Override
     public String afficherDetails() {
-        return "";
+        return "Magasine{" +
+                "numero=" + numero +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", nombreDePages=" + nombreDePages +
+                ", datePublication=" + datePublication +
+                ", acces=" + acces +
+                ", isEmprunt=" + isEmprunt +
+                '}';
     }
+
+
 
     @Override
     public void emprunter() {
@@ -46,5 +56,13 @@ public class Magasine  extends Documents implements Empruntable, Reservable {
     @Override
     public void annulerReservation() {
 
+    }
+
+    public int getNumero() {
+        return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 }

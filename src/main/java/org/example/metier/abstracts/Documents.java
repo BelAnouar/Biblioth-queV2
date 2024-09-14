@@ -13,6 +13,58 @@ public abstract  class Documents {
     protected UtilisateurType acces;
     protected boolean isEmprunt;
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setDatePublication(LocalDate datePublication) {
+        this.datePublication = datePublication;
+    }
+
+    public void setNombreDePages(int nombreDePages) {
+        this.nombreDePages = nombreDePages;
+    }
+
+    public void setAcces(UtilisateurType acces) {
+        this.acces = acces;
+    }
+
+    public void setEmprunt(boolean emprunt) {
+        isEmprunt = emprunt;
+    }
+
+    protected  Documents(){}
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    protected Documents(String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces) {
+        this.author = author;
+        this.title = title;
+        this.datePublication = datePublication;
+        this.nombreDePages = nombreDePages;
+        this.acces = acces;
+
+
+    }
+    protected Documents(int id,String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces) {
+        this.id=id;
+        this.author = author;
+        this.title = title;
+        this.datePublication = datePublication;
+        this.nombreDePages = nombreDePages;
+        this.acces = acces;
+
+
+    }
+    public int getId() {
+        return id;
+    }
 
     public boolean isEmprunt() {
         return isEmprunt;
@@ -42,15 +94,7 @@ public abstract  class Documents {
 
 
 
-    protected Documents(String author, String title, LocalDate datePublication, int nombreDePages, UtilisateurType acces, boolean isEmprunt) {
-        this.author = author;
-        this.title = title;
-        this.datePublication = datePublication;
-        this.nombreDePages = nombreDePages;
-        this.acces = acces;
-        this.isEmprunt = isEmprunt;
 
-    }
 
     public abstract String afficherDetails();
 }

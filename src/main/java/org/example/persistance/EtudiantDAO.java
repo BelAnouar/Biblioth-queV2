@@ -1,4 +1,4 @@
 package org.example.persistance;
 
-public class UtilisateurDAO {
+public class EtudiantDAO {
 }
