@@ -2,19 +2,26 @@ package org.example.persistance;
 
 import org.example.Enum.UtilisateurType;
 import org.example.metier.Livre;
-import org.example.metier.abstracts.Documents;
+import org.example.metier.Magasine;
 import org.example.persistance.interfaces.DocumentDAO;
 import org.example.utils.DataUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LivreDAOImp implements DocumentDAO<Livre> {
     private final Connection connection;
-
+    private static final Map<Integer, Livre> livreMap = new HashMap<>();
+    private static boolean isInitialized = false;
     public LivreDAOImp() throws SQLException {
         connection = DataUtils.getInstance().getConnection();
+        if (!isInitialized) {
+            displayAllDocuments();
+            isInitialized = true;
+        }
     }
 
     @Override
@@ -86,8 +93,16 @@ public class LivreDAOImp implements DocumentDAO<Livre> {
     }
 
     @Override
-    public Documents displayDocument(int documentId) {
-        return null;
+    public Livre displayDocument(int documentId) {
+        try {
+            System.out.println(livreMap.size());
+            Livre livre = livreMap.get(documentId);
+            return livre;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -95,13 +110,14 @@ public class LivreDAOImp implements DocumentDAO<Livre> {
         List<Livre> livres = new ArrayList<>();
 
         try {
-            String sql = "SELECT title, author, datePublication, nombrePage, access, isEprunter, isbn FROM Livre";
+            String sql = "SELECT id,title, author, datePublication, nombrePage, access, isEprunter, isbn FROM Livre";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 Livre livre = new Livre();
+                livre.setId(resultSet.getInt("id"));
                 livre.setTitle(resultSet.getString("title"));
                 livre.setAuthor(resultSet.getString("author"));
                 livre.setDatePublication(resultSet.getDate("datePublication").toLocalDate()); // Assuming you are using LocalDate
@@ -110,7 +126,12 @@ public class LivreDAOImp implements DocumentDAO<Livre> {
                 livre.setEmprunt(resultSet.getBoolean("isEprunter"));
                 livre.setIsbn(resultSet.getInt("isbn"));
 
-                livres.add(livre);
+
+                if (!isInitialized) {
+                    livreMap.put(livre.getId(), livre);
+                }else {
+                    livres.add(livre);
+                }
             }
 
         } catch (SQLException e) {
@@ -119,6 +140,41 @@ public class LivreDAOImp implements DocumentDAO<Livre> {
          System.out.println(livres);
         return livres;
     }
+
+
+    public void empruntDocument(int id) {
+        String sql = "UPDATE Livre SET isEprunter = true WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book borrowed successfully.");
+            } else {
+                System.out.println("No book found with the given ISBN or the book is already borrowed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void annulerEmpruntDocument(int id) {
+        String sql = "UPDATE Livre SET isEprunter = false WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book return processed successfully.");
+            } else {
+                System.out.println("No book found with the given ISBN or the book is not borrowed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }

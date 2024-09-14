@@ -2,21 +2,29 @@ package org.example.persistance;
 
 import org.example.Enum.UtilisateurType;
 import org.example.metier.JournalScientifique;
-import org.example.metier.abstracts.Documents;
+
+import org.example.metier.Magasine;
 import org.example.persistance.interfaces.DocumentDAO;
 import org.example.utils.DataUtils;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JournalScientifiqueDAOImp implements DocumentDAO<JournalScientifique> {
 
     private final Connection connection;
-
+    private final Map<Integer, JournalScientifique> journalScientifiqueMap = new HashMap<>();
+    private static boolean isInitialized = false;
     public JournalScientifiqueDAOImp() throws SQLException {
         connection = DataUtils.getInstance().getConnection();
+        if (!isInitialized) {
+            displayAllDocuments();
+            isInitialized = true;
+        }
     }
 
     @Override
@@ -74,8 +82,16 @@ public class JournalScientifiqueDAOImp implements DocumentDAO<JournalScientifiqu
     }
 
     @Override
-    public Documents displayDocument(int documentId) {
-        return null;
+    public JournalScientifique displayDocument(int documentId) {
+        try {
+
+            JournalScientifique journalScientifique = journalScientifiqueMap.get(documentId);
+            return journalScientifique;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -97,7 +113,12 @@ public class JournalScientifiqueDAOImp implements DocumentDAO<JournalScientifiqu
                 journalScientifique.setEmprunt(resultSet.getBoolean("isEprunter"));
                 journalScientifique.setDomaineRecherche(resultSet.getString("domaine_recherche"));
 
-                documents.add(journalScientifique);
+
+                if (!isInitialized) {
+                    journalScientifiqueMap.put(journalScientifique.getId(), journalScientifique);
+                }else {
+                    documents.add(journalScientifique);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -106,6 +127,40 @@ public class JournalScientifiqueDAOImp implements DocumentDAO<JournalScientifiqu
         return documents;
     }
 
+    public void empruntDocument(int id) {
+        String sql = "UPDATE journal_scientifique SET isEprunter = true WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book borrowed successfully.");
+            } else {
+                System.out.println("No book found with the given ISBN or the book is already borrowed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void annulerEmpruntDocument(int id) {
+        String sql = "UPDATE journal_scientifique SET isEprunter = false WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book return processed successfully.");
+            } else {
+                System.out.println("No book found with the given ISBN or the book is not borrowed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
+

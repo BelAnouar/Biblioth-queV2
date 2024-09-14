@@ -217,6 +217,9 @@ public class DocumentManagementUI implements MainGui {
             int ch = sc.nextInt();
             sc.nextLine();
             DocumentType type = getDocumentType(ch);
+            int id= sc.nextInt();
+
+            DocumentService.search(id,type);
         } catch (InputMismatchException e) {
             logInfo("Invalid input. Please enter the correct data type.");
 

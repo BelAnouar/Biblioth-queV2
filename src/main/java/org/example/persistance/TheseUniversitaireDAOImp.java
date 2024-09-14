@@ -1,21 +1,28 @@
 package org.example.persistance;
 
 import org.example.Enum.UtilisateurType;
+import org.example.metier.Magasine;
 import org.example.metier.TheseUniversitaire;
-import org.example.metier.abstracts.Documents;
 import org.example.persistance.interfaces.DocumentDAO;
 import org.example.utils.DataUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TheseUniversitaireDAOImp implements DocumentDAO<TheseUniversitaire> {
 
     private final Connection connection;
-
+    private final Map<Integer, TheseUniversitaire> theseUniversitaireMap = new HashMap<>();
+    private static boolean isInitialized = false;
     public TheseUniversitaireDAOImp() throws SQLException {
         connection = DataUtils.getInstance().getConnection();
+        if (!isInitialized) {
+            displayAllDocuments();
+            isInitialized = true;
+        }
     }
     @Override
     public void createDocument(TheseUniversitaire theseUniversitaire) {
@@ -85,21 +92,30 @@ public class TheseUniversitaireDAOImp implements DocumentDAO<TheseUniversitaire>
 
 
     @Override
-    public Documents displayDocument(int documentId) {
-        return null;
+    public TheseUniversitaire displayDocument(int documentId) {
+        try {
+
+            TheseUniversitaire theseUniversitaire = theseUniversitaireMap.get(documentId);
+            return theseUniversitaire;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public List<TheseUniversitaire> displayAllDocuments() {
         List<TheseUniversitaire> theses = new ArrayList<>();
 
-        String sql = "SELECT title, author, datePublication, nombrePage, access, isEprunter, universite, domaine FROM these_universitaire";
+        String sql = "SELECT id,title, author, datePublication, nombrePage, access, isEprunter, universite, domaine FROM these_universitaire";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 TheseUniversitaire theseUniversitaire = new TheseUniversitaire();
+                theseUniversitaire.setId(resultSet.getInt("id"));
                 theseUniversitaire.setTitle(resultSet.getString("title"));
                 theseUniversitaire.setAuthor(resultSet.getString("author"));
                 theseUniversitaire.setDatePublication(resultSet.getDate("datePublication").toLocalDate());
@@ -109,7 +125,12 @@ public class TheseUniversitaireDAOImp implements DocumentDAO<TheseUniversitaire>
                 theseUniversitaire.setUniversite(resultSet.getString("universite"));
                 theseUniversitaire.setDomaine(resultSet.getString("domaine"));
 
-                theses.add(theseUniversitaire);
+
+                if (!isInitialized) {
+                    theseUniversitaireMap.put(theseUniversitaire.getId(), theseUniversitaire);
+                }else {
+                    theses.add(theseUniversitaire);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,6 +139,41 @@ public class TheseUniversitaireDAOImp implements DocumentDAO<TheseUniversitaire>
         return theses;
     }
 
+    public void empruntDocument(int id) {
+        String sql = "UPDATE these_universitaire SET isEprunter = true WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book borrowed successfully.");
+            } else {
+                System.out.println("No book found with the given ISBN or the book is already borrowed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void annulerEmpruntDocument(int id) {
+        String sql = "UPDATE these_universitaire SET isEprunter = false WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, id);
+
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Book return processed successfully.");
+            } else {
+                System.out.println("No book found with the given ISBN or the book is not borrowed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 }
+
+

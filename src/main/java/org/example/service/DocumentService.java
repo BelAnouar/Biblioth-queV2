@@ -14,6 +14,7 @@ import org.example.persistance.TheseUniversitaireDAOImp;
 import java.sql.SQLException;
 
 public class DocumentService {
+
     private static LivreDAOImp livreDAOImp;
     private static MagazineDAOImp magazineDAOImp;
     private static JournalScientifiqueDAOImp journalScientifiqueDAOImp;
@@ -63,26 +64,7 @@ public class DocumentService {
     }
 
 
-//    public static void emprunter(String id, DocumentType type) {
-//
-//        switch (type) {
-//            case LIVRE -> livreDAOImp.emprunter(id);
-//            case MAGAZINE -> MagasineImp.emprunter(id);
-//            case JOURNAL_SCIENTIFIQUE -> JournalScientifiqueImp.emprunter(id);
-//            case THESE_UNIVERSITAIRE -> TheseUniversitaireImp.emprunter(id);
-//        }
-//    }
-//
-//    public static void retourner(String id, DocumentType type) {
-//
-//        switch (type) {
-//            case LIVRE -> LivreImp.retourner(id);
-//            case MAGAZINE -> MagasineImp.retourner(id);
-//            case JOURNAL_SCIENTIFIQUE -> JournalScientifiqueImp.retourner(id);
-//            case THESE_UNIVERSITAIRE -> TheseUniversitaireImp.retourner(id);
-//        }
-//    }
-//
+
     public static void afficherTous(DocumentType type) {
 
         switch (type) {
@@ -97,10 +79,10 @@ public class DocumentService {
     public static void search(int id, DocumentType type) {
 
         switch (type) {
-            case LIVRE -> livreDAOImp.displayDocument(id);
-            case MAGAZINE -> magazineDAOImp.displayDocument(id);
-            case JOURNAL_SCIENTIFIQUE -> journalScientifiqueDAOImp.displayDocument(id);
-            case THESE_UNIVERSITAIRE -> theseUniversitaireDAOImp.displayDocument(id);
+            case LIVRE -> System.out.println(livreDAOImp.displayDocument(id).afficherDetails());
+            case MAGAZINE -> System.out.println(magazineDAOImp.displayDocument(id).afficherDetails());
+            case JOURNAL_SCIENTIFIQUE -> System.out.println(journalScientifiqueDAOImp.displayDocument(id).afficherDetails());
+            case THESE_UNIVERSITAIRE -> System.out.println(theseUniversitaireDAOImp.displayDocument(id).afficherDetails());
         }
     }
 }

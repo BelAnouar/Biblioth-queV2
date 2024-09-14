@@ -2,7 +2,10 @@ package org.example.presentation.impl;
 
 import org.example.Enum.DocumentType;
 import org.example.presentation.MainGui;
+import org.example.service.LoanService;
+import org.example.service.ReservationService;
 
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -62,24 +65,44 @@ public class LoanManagementUI implements MainGui {
     public void emprunterDocument(Scanner sc) {
         logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");
 
-        int ch = sc.nextInt();
-        sc.nextLine();
-        DocumentType type = getDocumentType(ch);
+        try {
+            int ch = sc.nextInt();
+            sc.nextLine();
+            DocumentType type = getDocumentType(ch);
+            logInfo("Entrez l'ID de la enprunter :");
+            int id = sc.nextInt();
 
-        logInfo("Entrez le titre du document à emprunter :");
-        String title = sc.nextLine();
+
+            LoanService loanService = new LoanService();
+            loanService.emprunter(id,type);
+
+        } catch (InputMismatchException e) {
+            logInfo("Entrée invalide. Veuillez entrer un ID de réservation valide.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
     public void retournerDocument(Scanner sc) {
         logInfo("1. Livre, 2. Magazine, 3. JournalScientifique, 4. TheseUniversitaire:");
 
-        int ch = sc.nextInt();
-        sc.nextLine();
-        DocumentType type = getDocumentType(ch);
+        try {
+            int ch = sc.nextInt();
+            sc.nextLine();
+            DocumentType type = getDocumentType(ch);
+            logInfo("Entrez l'ID de la enprunter pour annuler :");
+            int id = sc.nextInt();
 
-        logInfo("Entrez le titre du document à retourner :");
-        String title = sc.nextLine();
+
+            LoanService loanService = new LoanService();
+            loanService.retourner(id,type);
+
+        } catch (InputMismatchException e) {
+            logInfo("Entrée invalide. Veuillez entrer un ID de réservation valide.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
