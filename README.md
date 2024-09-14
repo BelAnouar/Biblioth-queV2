@@ -121,3 +121,6 @@ cd out/artifacts/Bibliothequev2_jar
      java -jar Bibliothequev2.jar
     ```
 
+```
+## Link plan jira
+https://cinemy.atlassian.net/jira/software/projects/BB/boards/6/backlog?selectedIssue=BB-2
