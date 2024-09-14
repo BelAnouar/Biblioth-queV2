@@ -160,7 +160,7 @@ public class DocumentManagementUI implements MainGui {
         logInfo("Document type (1. Book, 2. Magazine, 3. Scientific Journal, 4. University Thesis):");
 
         int ch = sc.nextInt();
-        sc.nextLine(); // Consume newline after the number input
+        sc.nextLine();
         DocumentType type = getDocumentType(ch);
         logInfo("Enter author:");
         String author = sc.nextLine();

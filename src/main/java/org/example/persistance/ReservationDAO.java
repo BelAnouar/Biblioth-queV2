@@ -35,7 +35,8 @@ public class ReservationDAO {
     }
     public boolean getReservationStatus(int reservationId) {
         String sql = "SELECT status FROM reservations WHERE id = ?";
-        boolean status = false; // Default status if reservation is not found
+        boolean status = false;
+
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, reservationId);

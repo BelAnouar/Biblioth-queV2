@@ -120,9 +120,9 @@ public class LivreDAOImp implements DocumentDAO<Livre> {
                 livre.setId(resultSet.getInt("id"));
                 livre.setTitle(resultSet.getString("title"));
                 livre.setAuthor(resultSet.getString("author"));
-                livre.setDatePublication(resultSet.getDate("datePublication").toLocalDate()); // Assuming you are using LocalDate
+                livre.setDatePublication(resultSet.getDate("datePublication").toLocalDate());
                 livre.setNombreDePages(resultSet.getInt("nombrePage"));
-                livre.setAcces(UtilisateurType.valueOf(resultSet.getString("access"))); // Assuming Acces is an enum
+                livre.setAcces(UtilisateurType.valueOf(resultSet.getString("access")));
                 livre.setEmprunt(resultSet.getBoolean("isEprunter"));
                 livre.setIsbn(resultSet.getInt("isbn"));
 

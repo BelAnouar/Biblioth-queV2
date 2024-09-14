@@ -109,7 +109,7 @@ public class JournalScientifiqueDAOImp implements DocumentDAO<JournalScientifiqu
                 journalScientifique.setAuthor(resultSet.getString("author"));
                 journalScientifique.setDatePublication(resultSet.getObject("datePublication", LocalDate.class));
                 journalScientifique.setNombreDePages(resultSet.getInt("nombrePage"));
-                journalScientifique.setAcces(UtilisateurType.valueOf(resultSet.getString("access"))); // Adjust if using an enum
+                journalScientifique.setAcces(UtilisateurType.valueOf(resultSet.getString("access")));
                 journalScientifique.setEmprunt(resultSet.getBoolean("isEprunter"));
                 journalScientifique.setDomaineRecherche(resultSet.getString("domaine_recherche"));
 
